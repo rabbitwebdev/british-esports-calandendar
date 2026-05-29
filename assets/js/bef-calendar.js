@@ -117,7 +117,7 @@
     }
 
     if (hasViewLink && !duplicateLinks) {
-      const externalAttrs = event.source === 'eventbrite' ? ' target="_blank" rel="noopener noreferrer"' : '';
+      const externalAttrs = event.source === 'eventbrite' ? '  rel="noopener noreferrer"' : '';
       actions.push(`<a href="${escapeHtml(event.url)}" class="bef-event-link bef-event-link--detail"${externalAttrs}>${escapeHtml(event.linkLabel || labels.viewEvent)}</a>`);
     }
 
