@@ -3767,7 +3767,7 @@ class BEF_Calendar {
 
                     <div class="bef-calendar-header">
                         <div>
-                            <p class="bef-calendar-mini-label"><?php esc_html_e( 'Plan your next match day', 'bef-calendar' ); ?></p>
+                            <p class="bef-calendar-mini-label"><?php esc_html_e( 'Events', 'bef-calendar' ); ?></p>
                         </div>
                         <div class="bef-calendar-controls">
                             <?php if ( $args['show_view_toggle'] ) : ?>
