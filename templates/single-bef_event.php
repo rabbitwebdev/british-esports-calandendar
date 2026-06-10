@@ -99,14 +99,14 @@ while ( have_posts() ) :
                             <?php endif; ?>
 
                             <?php if ( $location ) : ?>
-                                <div class="bef-event-single__meta-item">
+                                <div class="bef-event-single__meta-item bef-event-single__meta-item--wide">
                                     <span class="bef-event-single__meta-label"><?php esc_html_e( 'Location', 'bef-calendar' ); ?></span>
                                     <strong><?php echo esc_html( $location ); ?></strong>
                                 </div>
                             <?php endif; ?>
 
                             <?php if ( 'eventbrite' === $source_meta && $eventbrite_organizer ) : ?>
-                                <div class="bef-event-single__meta-item">
+                                <div class="bef-event-single__meta-item bef-event-single__meta-item--wide">
                                     <span class="bef-event-single__meta-label"><?php esc_html_e( 'Organiser', 'bef-calendar' ); ?></span>
                                     <strong><?php echo esc_html( $eventbrite_organizer ); ?></strong>
                                 </div>

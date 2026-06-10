@@ -451,6 +451,23 @@
 }
 
 .bef-event-single__meta {
+  display: flex;
+  gap: 2px;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.bef-event-single__meta-item {
+  padding: 10px;
+  border-radius: 0px;
+  background: #dc3545;
+  font-size: 12px;
+  width: 49%;
+  color: #fff;
+}
+
+/* .bef-event-single__meta {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
@@ -462,7 +479,7 @@
   border-radius: 0px; 
   background: var(--bef-surface-alt);
   border: 1px solid var(--bef-border);
-}
+} */
 
 .bef-event-single__meta-label {
   display: block;
