@@ -307,6 +307,7 @@
 }
 
 .bef-event-source {
+  display: none;
   margin: 0 0 0.35rem;
   font-size: 0.72rem;
   font-weight: 800;
