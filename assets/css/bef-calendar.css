@@ -1447,6 +1447,7 @@
 }
 
 .bef-event-card {
+  position: relative;
   display: flex !important;
   flex-direction: column;
   gap: 5px !important;
@@ -1512,6 +1513,9 @@ aside.bef-calendar-sidebar {
 }
 
 @media (max-width: 900px) {
+  aside.bef-calendar-sidebar {
+      overflow: hidden;
+    }
   .bef-featured-event {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1543,6 +1547,15 @@ aside.bef-calendar-sidebar {
     scroll-snap-type: x proximity;
     -webkit-overflow-scrolling: touch;
   }
+    .bef-event-recurrence {
+      margin: 0.35rem 0 0.5rem;
+      color: white;
+      font-weight: 600;
+      font-size: 10px;
+      position: absolute;
+      top: 0;
+      left: 8px;
+    }
 
   .bef-event-card {
     width: 100%;
