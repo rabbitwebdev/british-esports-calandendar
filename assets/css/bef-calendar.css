@@ -293,6 +293,12 @@
   background: var(--bef-surface-alt);
   border: 1px solid var(--bef-border);
 }
+.bef-archive-card__meta {
+  display: none !important;
+}
+.bef-archive-card__excerpt {
+  display: none !important;
+}
 
 /* .bef-event-thumb img {
   display: block;
