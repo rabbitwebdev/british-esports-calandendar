@@ -32,7 +32,6 @@ while ( have_posts() ) :
     $eventbrite_organizer = get_post_meta( $event_id, BEF_Calendar::META_EVENTBRITE_ORGANIZER, true );
     $eventbrite_venue_address = get_post_meta( $event_id, BEF_Calendar::META_EVENTBRITE_VENUE_ADDRESS, true );
     $source_meta       = get_post_meta( $event_id, BEF_Calendar::META_SOURCE, true );
-    $source_label      = 'eventbrite' === $source_meta ? __( 'Eventbrite', 'bef-calendar' ) : ( 'british_arena' === $source_meta ? __( 'British Arena', 'bef-calendar' ) : ( 'google_sheets' === $source_meta ? __( 'Google Sheet', 'bef-calendar' ) : ( 'google_sheet_upload' === $source_meta ? __( 'Sheet Upload', 'bef-calendar' ) : __( 'Website', 'bef-calendar' ) ) ) );
     $recurrence_summary = bef_calendar() ? bef_calendar()->get_event_recurrence_summary( $event_id ) : '';
     $next_occurrences   = bef_calendar() ? bef_calendar()->get_event_next_occurrences( $event_id, 6 ) : array();
 
@@ -61,6 +60,7 @@ while ( have_posts() ) :
     $excerpt             = has_excerpt() ? get_the_excerpt() : '';
     $google_calendar_url = bef_calendar() ? bef_calendar()->get_google_calendar_url( $event_id ) : '';
     $ics_export_url      = bef_calendar() ? bef_calendar()->get_ics_export_url( $event_id ) : '';
+    $display_image       = bef_calendar() ? bef_calendar()->get_event_image_url( $event_id, 'large' ) : ( $remote_image ? $remote_image : trailingslashit( BEF_CALENDAR_URL ) . 'assets/images/default-event-image.svg' );
     ?>
     <main id="primary" class="bef-event-single">
         <article <?php post_class( 'bef-event-single__article' ); ?>>
@@ -68,7 +68,6 @@ while ( have_posts() ) :
                 <header class="bef-event-single__header">
                     <div class="bef-event-single__copy">
                         <p class="bef-calendar-kicker"><?php esc_html_e( 'British Esports Calendar Event', 'bef-calendar' ); ?></p>
-                        <p class="bef-event-source"><?php echo esc_html( $source_label ); ?></p>
 
                         <?php if ( ! empty( $event_terms ) && ! is_wp_error( $event_terms ) ) : ?>
                             <div class="bef-event-single__terms">
@@ -188,13 +187,9 @@ while ( have_posts() ) :
                         <?php endif; ?>
                     </div>
 
-                    <?php if ( has_post_thumbnail() || $remote_image ) : ?>
+                    <?php if ( $display_image ) : ?>
                         <div class="bef-event-single__media">
-                            <?php if ( has_post_thumbnail() ) : ?>
-                                <?php the_post_thumbnail( 'large', array( 'class' => 'bef-event-single__image' ) ); ?>
-                            <?php else : ?>
-                                <img class="bef-event-single__image" src="<?php echo esc_url( $remote_image ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>">
-                            <?php endif; ?>
+                            <img class="bef-event-single__image" src="<?php echo esc_url( $display_image ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>">
                         </div>
                     <?php endif; ?>
                 </header>

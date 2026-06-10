@@ -16,6 +16,7 @@ class BEF_Calendar {
     const META_URL = '_bef_event_url';
     const META_TICKET_URL = '_bef_event_ticket_url';
     const META_TICKET_LABEL = '_bef_event_ticket_label';
+    const META_FEATURED = '_bef_event_featured';
     const META_RECURRENCE_FREQUENCY = '_bef_event_recurrence_frequency';
     const META_RECURRENCE_INTERVAL = '_bef_event_recurrence_interval';
     const META_RECURRENCE_UNTIL = '_bef_event_recurrence_until';
@@ -262,6 +263,7 @@ class BEF_Calendar {
             self::META_URL                  => 'esc_url_raw',
             self::META_TICKET_URL           => 'esc_url_raw',
             self::META_TICKET_LABEL         => 'sanitize_text_field',
+            self::META_FEATURED             => 'absint',
             self::META_RECURRENCE_FREQUENCY => 'sanitize_text_field',
             self::META_RECURRENCE_INTERVAL  => 'absint',
             self::META_RECURRENCE_UNTIL     => 'sanitize_text_field',
@@ -944,6 +946,13 @@ class BEF_Calendar {
                                     <input type="url" id="bef_quick_event_url" name="bef_quick_event_url" value="<?php echo esc_attr( $fields['event_url'] ); ?>" placeholder="https://">
                                 </div>
 
+                                <div class="bef-field-full">
+                                    <label class="bef-quick-chip" for="bef_quick_featured">
+                                        <input type="checkbox" id="bef_quick_featured" name="bef_quick_featured" value="1" <?php checked( ! empty( $fields['featured'] ) ); ?>>
+                                        <?php esc_html_e( 'Feature this event above the calendar', 'bef-calendar' ); ?>
+                                    </label>
+                                </div>
+
                                 <div>
                                     <label for="bef_quick_status"><?php esc_html_e( 'Save as', 'bef-calendar' ); ?></label>
                                     <select id="bef_quick_status" name="bef_quick_status">
@@ -1077,6 +1086,7 @@ class BEF_Calendar {
             'status'       => 'publish',
             'image_id'     => 0,
             'image_url'    => '',
+            'featured'     => 0,
             'categories'            => array(),
             'recurrence_frequency'  => 'none',
             'recurrence_interval'   => 1,
@@ -1104,6 +1114,7 @@ class BEF_Calendar {
             'status'       => $is_duplicate ? 'draft' : $post->post_status,
             'image_id'     => $image_id,
             'image_url'    => $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : '',
+            'featured'     => (int) get_post_meta( $post->ID, self::META_FEATURED, true ),
             'categories'            => wp_get_post_terms( $post->ID, self::TAXONOMY, array( 'fields' => 'ids' ) ),
             'recurrence_frequency'  => $this->normalize_recurrence_frequency( get_post_meta( $post->ID, self::META_RECURRENCE_FREQUENCY, true ) ),
             'recurrence_interval'   => max( 1, absint( get_post_meta( $post->ID, self::META_RECURRENCE_INTERVAL, true ) ) ),
@@ -1170,6 +1181,7 @@ class BEF_Calendar {
             self::META_URL                  => isset( $_POST['bef_quick_event_url'] ) ? esc_url_raw( wp_unslash( $_POST['bef_quick_event_url'] ) ) : '',
             self::META_TICKET_URL           => isset( $_POST['bef_quick_ticket_url'] ) ? esc_url_raw( wp_unslash( $_POST['bef_quick_ticket_url'] ) ) : '',
             self::META_TICKET_LABEL         => isset( $_POST['bef_quick_ticket_label'] ) ? sanitize_text_field( wp_unslash( $_POST['bef_quick_ticket_label'] ) ) : '',
+            self::META_FEATURED             => ! empty( $_POST['bef_quick_featured'] ) ? 1 : 0,
             self::META_RECURRENCE_FREQUENCY => $this->normalize_recurrence_frequency( isset( $_POST['bef_quick_recurrence_frequency'] ) ? wp_unslash( $_POST['bef_quick_recurrence_frequency'] ) : 'none' ),
             self::META_RECURRENCE_INTERVAL  => max( 1, absint( isset( $_POST['bef_quick_recurrence_interval'] ) ? wp_unslash( $_POST['bef_quick_recurrence_interval'] ) : 1 ) ),
             self::META_RECURRENCE_UNTIL     => isset( $_POST['bef_quick_recurrence_until'] ) ? sanitize_text_field( wp_unslash( $_POST['bef_quick_recurrence_until'] ) ) : '',
@@ -1376,6 +1388,11 @@ class BEF_Calendar {
                                     <input type="text" name="bef_front_ticket_label" value="<?php echo esc_attr( $fields['ticket_label'] ); ?>" placeholder="<?php echo esc_attr__( 'Purchase Tickets', 'bef-calendar' ); ?>">
                                 </label>
 
+                                <label class="bef-staff-form__checkbox bef-staff-form__field bef-staff-form__field--full">
+                                    <input type="checkbox" name="bef_front_featured" value="1" <?php checked( ! empty( $fields['featured'] ) ); ?>>
+                                    <span><?php esc_html_e( 'Feature this event above the calendar', 'bef-calendar' ); ?></span>
+                                </label>
+
                                 <div class="bef-staff-form__field bef-staff-form__field--full">
                                     <span><?php esc_html_e( 'Categories', 'bef-calendar' ); ?></span>
                                     <div class="bef-staff-form__checks">
@@ -1519,6 +1536,7 @@ class BEF_Calendar {
             self::META_URL                  => isset( $_POST['bef_front_event_url'] ) ? esc_url_raw( wp_unslash( $_POST['bef_front_event_url'] ) ) : '',
             self::META_TICKET_URL           => isset( $_POST['bef_front_ticket_url'] ) ? esc_url_raw( wp_unslash( $_POST['bef_front_ticket_url'] ) ) : '',
             self::META_TICKET_LABEL         => isset( $_POST['bef_front_ticket_label'] ) ? sanitize_text_field( wp_unslash( $_POST['bef_front_ticket_label'] ) ) : '',
+            self::META_FEATURED             => ! empty( $_POST['bef_front_featured'] ) ? 1 : 0,
             self::META_RECURRENCE_FREQUENCY => $this->normalize_recurrence_frequency( isset( $_POST['bef_front_recurrence_frequency'] ) ? wp_unslash( $_POST['bef_front_recurrence_frequency'] ) : 'none' ),
             self::META_RECURRENCE_INTERVAL  => max( 1, absint( isset( $_POST['bef_front_recurrence_interval'] ) ? wp_unslash( $_POST['bef_front_recurrence_interval'] ) : 1 ) ),
             self::META_RECURRENCE_UNTIL     => isset( $_POST['bef_front_recurrence_until'] ) ? sanitize_text_field( wp_unslash( $_POST['bef_front_recurrence_until'] ) ) : '',
@@ -2018,7 +2036,7 @@ class BEF_Calendar {
                         'excerpt'            => $excerpt,
                         'terms'              => $event_terms,
                         'remote_image'       => $remote_image,
-                        'thumbnail'          => get_the_post_thumbnail_url( $post_id, 'large' ),
+                        'thumbnail'          => $this->get_event_image_url( $post_id, 'large' ),
                         'source_label'       => $source_label,
                         'recurrence_summary' => $recurrence_summary,
                     );
@@ -2808,6 +2826,37 @@ class BEF_Calendar {
      * @param int $post_id Post ID.
      * @return string
      */
+
+    /**
+     * Get the default fallback image for events.
+     *
+     * @return string
+     */
+    public function get_default_event_image_url() {
+        return trailingslashit( BEF_CALENDAR_URL ) . 'assets/images/default-event-image.svg';
+    }
+
+    /**
+     * Resolve the best image URL for an event.
+     *
+     * @param int    $post_id Post ID.
+     * @param string $size    Image size.
+     * @return string
+     */
+    public function get_event_image_url( $post_id, $size = 'large' ) {
+        $thumbnail = get_the_post_thumbnail_url( $post_id, $size );
+        if ( $thumbnail ) {
+            return $thumbnail;
+        }
+
+        $remote_image = get_post_meta( $post_id, self::META_REMOTE_IMAGE_URL, true );
+        if ( $remote_image ) {
+            return $remote_image;
+        }
+
+        return $this->get_default_event_image_url();
+    }
+
     private function get_post_source_label( $post_id ) {
         $source = get_post_meta( $post_id, self::META_SOURCE, true );
 
@@ -3165,6 +3214,7 @@ class BEF_Calendar {
         $event_url    = get_post_meta( $post->ID, self::META_URL, true );
         $ticket_url   = get_post_meta( $post->ID, self::META_TICKET_URL, true );
         $ticket_label         = get_post_meta( $post->ID, self::META_TICKET_LABEL, true );
+        $is_featured          = (bool) get_post_meta( $post->ID, self::META_FEATURED, true );
         $recurrence_frequency = $this->normalize_recurrence_frequency( get_post_meta( $post->ID, self::META_RECURRENCE_FREQUENCY, true ) );
         $recurrence_interval  = max( 1, absint( get_post_meta( $post->ID, self::META_RECURRENCE_INTERVAL, true ) ) );
         $recurrence_until     = get_post_meta( $post->ID, self::META_RECURRENCE_UNTIL, true );
@@ -3218,6 +3268,12 @@ class BEF_Calendar {
                 <label for="bef_event_ticket_label"><?php esc_html_e( 'Ticket Button Label (optional)', 'bef-calendar' ); ?></label>
                 <input type="text" id="bef_event_ticket_label" name="bef_event_ticket_label" value="<?php echo esc_attr( $ticket_label ); ?>" placeholder="<?php esc_attr_e( 'Purchase Tickets', 'bef-calendar' ); ?>">
                 <p class="description" style="margin-top:6px;"><?php esc_html_e( 'For example: Purchase Tickets, Register Now, Book Your Place.', 'bef-calendar' ); ?></p>
+            </div>
+            <div class="bef-field-full">
+                <label for="bef_event_featured">
+                    <input type="checkbox" id="bef_event_featured" name="bef_event_featured" value="1" <?php checked( $is_featured ); ?>>
+                    <?php esc_html_e( 'Feature this event above the calendar', 'bef-calendar' ); ?>
+                </label>
             </div>
             <div>
                 <label for="bef_event_recurrence_frequency"><?php esc_html_e( 'Repeats', 'bef-calendar' ); ?></label>
@@ -3273,6 +3329,7 @@ class BEF_Calendar {
         $event_url    = isset( $_POST['bef_event_url'] ) ? esc_url_raw( wp_unslash( $_POST['bef_event_url'] ) ) : '';
         $ticket_url   = isset( $_POST['bef_event_ticket_url'] ) ? esc_url_raw( wp_unslash( $_POST['bef_event_ticket_url'] ) ) : '';
         $ticket_label        = isset( $_POST['bef_event_ticket_label'] ) ? sanitize_text_field( wp_unslash( $_POST['bef_event_ticket_label'] ) ) : '';
+        $featured            = ! empty( $_POST['bef_event_featured'] ) ? 1 : 0;
         $recurrence_frequency = $this->normalize_recurrence_frequency( isset( $_POST['bef_event_recurrence_frequency'] ) ? wp_unslash( $_POST['bef_event_recurrence_frequency'] ) : 'none' );
         $recurrence_interval  = max( 1, absint( isset( $_POST['bef_event_recurrence_interval'] ) ? wp_unslash( $_POST['bef_event_recurrence_interval'] ) : 1 ) );
         $recurrence_until     = isset( $_POST['bef_event_recurrence_until'] ) ? sanitize_text_field( wp_unslash( $_POST['bef_event_recurrence_until'] ) ) : '';
@@ -3285,6 +3342,7 @@ class BEF_Calendar {
         update_post_meta( $post_id, self::META_URL, $event_url );
         update_post_meta( $post_id, self::META_TICKET_URL, $ticket_url );
         update_post_meta( $post_id, self::META_TICKET_LABEL, $ticket_label );
+        update_post_meta( $post_id, self::META_FEATURED, $featured );
         update_post_meta( $post_id, self::META_RECURRENCE_FREQUENCY, $recurrence_frequency );
         update_post_meta( $post_id, self::META_RECURRENCE_INTERVAL, $recurrence_interval );
         update_post_meta( $post_id, self::META_RECURRENCE_UNTIL, $recurrence_until );
@@ -3447,6 +3505,15 @@ class BEF_Calendar {
                         'default_value' => 1,
                     ),
                     array(
+                        'key'           => 'field_bef_show_featured_event',
+                        'label'         => 'Show Featured Event',
+                        'name'          => 'show_featured_event',
+                        'type'          => 'true_false',
+                        'ui'            => 1,
+                        'message'       => 'Display the next featured event above the calendar',
+                        'default_value' => 1,
+                    ),
+                    array(
                         'key'           => 'field_bef_show_view_toggle',
                         'label'         => 'Show View Toggle',
                         'name'          => 'show_view_toggle',
@@ -3579,6 +3646,7 @@ class BEF_Calendar {
                 'button_new_tab'       => 'no',
                 'show_wordpress'       => 'yes',
                 'show_eventbrite'      => ! empty( $settings['default_show_external'] ) ? 'yes' : 'no',
+                'show_featured'        => 'yes',
                 'show_view_toggle'     => 'yes',
                 'class'                => '',
                 'id'                   => '',
@@ -3602,6 +3670,7 @@ class BEF_Calendar {
                 'include_past_events'  => 'yes' === strtolower( (string) $atts['include_past'] ),
                 'show_wordpress'       => 'yes' === strtolower( (string) $atts['show_wordpress'] ),
                 'show_eventbrite'      => 'yes' === strtolower( (string) $atts['show_eventbrite'] ),
+                'show_featured_event'  => 'yes' === strtolower( (string) $atts['show_featured'] ),
                 'show_view_toggle'     => 'yes' === strtolower( (string) $atts['show_view_toggle'] ),
                 'classes'              => $atts['class'],
                 'section_id'           => $atts['id'],
@@ -3647,6 +3716,7 @@ class BEF_Calendar {
                 'button_target'        => ! empty( $button['target'] ),
                 'background_image'     => is_array( $background ) && ! empty( $background['url'] ) ? $background['url'] : '',
                 'show_sidebar'         => function_exists( 'get_field' ) ? (bool) get_field( 'show_sidebar' ) : true,
+                'show_featured_event'  => function_exists( 'get_field' ) ? (bool) get_field( 'show_featured_event' ) : true,
                 'show_view_toggle'     => function_exists( 'get_field' ) ? (bool) get_field( 'show_view_toggle' ) : true,
                 'include_past_events'  => function_exists( 'get_field' ) ? (bool) get_field( 'include_past_events' ) : true,
                 'show_wordpress'       => function_exists( 'get_field' ) ? (bool) get_field( 'show_wordpress_events' ) : true,
@@ -3678,6 +3748,7 @@ class BEF_Calendar {
             'button_target'        => false,
             'background_image'     => '',
             'show_sidebar'         => true,
+            'show_featured_event'  => true,
             'show_view_toggle'     => true,
             'include_past_events'  => true,
             'show_wordpress'       => true,
@@ -3699,6 +3770,14 @@ class BEF_Calendar {
             (bool) $args['show_wordpress'],
             (bool) $args['show_eventbrite']
         );
+
+        $featured_event = ! empty( $args['show_featured_event'] )
+            ? $this->get_featured_event_for_frontend(
+                (bool) $args['include_past_events'],
+                (bool) $args['show_wordpress'],
+                (bool) $args['show_eventbrite']
+            )
+            : array();
 
         $instance_id = uniqid( 'bef-calendar-', false );
         $section_id  = $args['section_id'] ? sanitize_title( $args['section_id'] ) : $instance_id;
@@ -3765,11 +3844,12 @@ class BEF_Calendar {
                         </div>
                     <?php endif; ?>
 
+                    <?php if ( ! empty( $featured_event ) ) : ?>
+                        <?php echo $this->render_featured_event_markup( $featured_event ); ?>
+                    <?php endif; ?>
+
                     <div class="bef-calendar-header">
-                        <div>
-                            <p class="bef-calendar-mini-label"><?php esc_html_e( 'Events', 'bef-calendar' ); ?></p>
-                        </div>
-                        <div class="bef-calendar-controls">
+                            <div class="bef-calendar-controls">
                             <?php if ( $args['show_view_toggle'] ) : ?>
                                 <div class="bef-view-toggle" role="tablist" aria-label="<?php esc_attr_e( 'Calendar view', 'bef-calendar' ); ?>">
                                     <button type="button" class="bef-view-button" data-bef-view="month"><?php esc_html_e( 'Month', 'bef-calendar' ); ?></button>
@@ -3815,6 +3895,218 @@ class BEF_Calendar {
         </section>
         <?php
 
+        return ob_get_clean();
+    }
+
+    /**
+     * Get the next featured event for the frontend calendar.
+     *
+     * @param bool $include_past    Whether past events may be used as a fallback.
+     * @param bool $show_wordpress  Whether to include local website-style events.
+     * @param bool $show_eventbrite Whether to include imported Eventbrite events.
+     * @return array
+     */
+    private function get_featured_event_for_frontend( $include_past = true, $show_wordpress = true, $show_eventbrite = false ) {
+        $query = new WP_Query(
+            array(
+                'post_type'      => self::POST_TYPE,
+                'post_status'    => 'publish',
+                'posts_per_page' => -1,
+                'no_found_rows'  => true,
+                'meta_query'     => array(
+                    array(
+                        'key'     => self::META_FEATURED,
+                        'value'   => '1',
+                        'compare' => '=',
+                    ),
+                ),
+            )
+        );
+
+        if ( ! $query->have_posts() ) {
+            return array();
+        }
+
+        $candidates = array();
+
+        foreach ( $query->posts as $post ) {
+            $post_id       = $post->ID;
+            $source_value  = (string) get_post_meta( $post_id, self::META_SOURCE, true );
+            $is_eventbrite = 'eventbrite' === $source_value;
+
+            if ( $is_eventbrite && ! $show_eventbrite ) {
+                continue;
+            }
+
+            if ( ! $is_eventbrite && ! $show_wordpress ) {
+                continue;
+            }
+
+            $candidate = $this->build_featured_event_data( $post_id, $include_past );
+
+            if ( ! empty( $candidate ) ) {
+                $candidates[] = $candidate;
+            }
+        }
+
+        wp_reset_postdata();
+
+        if ( empty( $candidates ) ) {
+            return array();
+        }
+
+        usort(
+            $candidates,
+            static function ( $a, $b ) {
+                $a_key = ( $a['date'] ?? '' ) . ' ' . ( $a['rawStartTime'] ?? '23:59:59' );
+                $b_key = ( $b['date'] ?? '' ) . ' ' . ( $b['rawStartTime'] ?? '23:59:59' );
+                return strcmp( $a_key, $b_key );
+            }
+        );
+
+        return $candidates[0];
+    }
+
+    /**
+     * Build featured event data for a local event post.
+     *
+     * @param int  $post_id       Event post ID.
+     * @param bool $include_past  Whether to allow a past fallback.
+     * @return array
+     */
+    private function build_featured_event_data( $post_id, $include_past = true ) {
+        $today       = current_time( 'Y-m-d' );
+        $future_end  = $this->add_days_to_event_date( $today, 540 );
+        $occurrences = $this->get_event_occurrences( $post_id, $today, $future_end, 180 );
+
+        if ( ! empty( $occurrences ) ) {
+            $occurrence = $occurrences[0];
+        } elseif ( $include_past ) {
+            $past_start  = $this->add_days_to_event_date( $today, -365 );
+            $past_events = $this->get_event_occurrences( $post_id, $past_start, $today, 180 );
+
+            if ( empty( $past_events ) ) {
+                return array();
+            }
+
+            $occurrence = end( $past_events );
+        } else {
+            return array();
+        }
+
+        $start_time         = get_post_meta( $post_id, self::META_START_TIME, true );
+        $end_time           = get_post_meta( $post_id, self::META_END_TIME, true );
+        $location           = get_post_meta( $post_id, self::META_LOCATION, true );
+        $event_url          = get_post_meta( $post_id, self::META_URL, true );
+        $ticket_url         = get_post_meta( $post_id, self::META_TICKET_URL, true );
+        $ticket_label       = get_post_meta( $post_id, self::META_TICKET_LABEL, true );
+        $source_label       = $this->get_post_source_label( $post_id );
+        $remote_image       = get_post_meta( $post_id, self::META_REMOTE_IMAGE_URL, true );
+        $recurrence_summary = $this->get_event_recurrence_summary( $post_id );
+        $excerpt            = has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : '';
+
+        if ( ! $excerpt ) {
+            $excerpt = wp_trim_words( wp_strip_all_tags( get_post_field( 'post_content', $post_id ) ), 30 );
+        }
+
+        return array(
+            'postId'            => $post_id,
+            'title'             => get_the_title( $post_id ),
+            'date'              => $occurrence['date'],
+            'endDate'           => $occurrence['end_date'],
+            'rawStartTime'      => $start_time,
+            'rawEndTime'        => $end_time,
+            'startTime'         => $start_time ? date_i18n( get_option( 'time_format' ), strtotime( $start_time ) ) : '',
+            'endTime'           => $end_time ? date_i18n( get_option( 'time_format' ), strtotime( $end_time ) ) : '',
+            'location'          => $location,
+            'url'               => get_permalink( $post_id ),
+            'externalUrl'       => $event_url,
+            'ticketUrl'         => $ticket_url,
+            'ticketLabel'       => $ticket_label ? $ticket_label : __( 'Purchase Tickets', 'bef-calendar' ),
+            'excerpt'           => $excerpt,
+            'thumbnail'         => $this->get_event_image_url( $post_id, 'large' ),
+            'categories'        => wp_get_post_terms( $post_id, self::TAXONOMY, array( 'fields' => 'names' ) ),
+            'sourceLabel'       => $source_label,
+            'recurrenceSummary' => $recurrence_summary,
+        );
+    }
+
+    /**
+     * Render the featured event card displayed above the calendar.
+     *
+     * @param array $event Featured event data.
+     * @return string
+     */
+    private function render_featured_event_markup( $event ) {
+        $date_text = '';
+        if ( ! empty( $event['date'] ) ) {
+            $date_text = wp_date( get_option( 'date_format' ), strtotime( $event['date'] ) );
+            if ( ! empty( $event['endDate'] ) && $event['endDate'] !== $event['date'] ) {
+                $date_text .= ' - ' . wp_date( get_option( 'date_format' ), strtotime( $event['endDate'] ) );
+            }
+        }
+
+        $time_text = '';
+        if ( ! empty( $event['startTime'] ) ) {
+            $time_text = $event['startTime'];
+            if ( ! empty( $event['endTime'] ) ) {
+                $time_text .= ' - ' . $event['endTime'];
+            }
+        } elseif ( ! empty( $event['endTime'] ) ) {
+            $time_text = $event['endTime'];
+        }
+
+        ob_start();
+        ?>
+        <div class="bef-featured-event">
+            <div class="bef-featured-event__content">
+                <div class="bef-featured-event__eyebrow-row">
+                    <span class="bef-featured-event__eyebrow"><?php esc_html_e( 'Featured Event', 'bef-calendar' ); ?></span>
+                </div>
+
+                <h3 class="bef-featured-event__title">
+                    <a href="<?php echo esc_url( $event['url'] ); ?>"><?php echo esc_html( $event['title'] ); ?></a>
+                </h3>
+
+                <?php if ( ! empty( $event['categories'] ) ) : ?>
+                    <div class="bef-featured-event__chips">
+                        <?php foreach ( (array) $event['categories'] as $category_name ) : ?>
+                            <span class="bef-archive-chip"><?php echo esc_html( $category_name ); ?></span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="bef-featured-event__meta">
+                    <?php if ( $date_text ) : ?><span><?php echo esc_html( $date_text ); ?></span><?php endif; ?>
+                    <?php if ( $time_text ) : ?><span><?php echo esc_html( $time_text ); ?></span><?php endif; ?>
+                    <?php if ( ! empty( $event['location'] ) ) : ?><span><?php echo esc_html( $event['location'] ); ?></span><?php endif; ?>
+                </div>
+
+                <?php if ( ! empty( $event['recurrenceSummary'] ) ) : ?>
+                    <p class="bef-featured-event__recurrence"><?php echo esc_html( $event['recurrenceSummary'] ); ?></p>
+                <?php endif; ?>
+
+                <?php if ( ! empty( $event['excerpt'] ) ) : ?>
+                    <div class="bef-featured-event__excerpt"><?php echo wp_kses_post( wpautop( $event['excerpt'] ) ); ?></div>
+                <?php endif; ?>
+
+                <div class="bef-featured-event__actions">
+                    <a class="bef-calendar-button" href="<?php echo esc_url( $event['url'] ); ?>"><?php esc_html_e( 'View Event', 'bef-calendar' ); ?></a>
+                    <?php if ( ! empty( $event['ticketUrl'] ) ) : ?>
+                        <a class="bef-calendar-button bef-calendar-button--ghost" href="<?php echo esc_url( $event['ticketUrl'] ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $event['ticketLabel'] ); ?></a>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <?php if ( ! empty( $event['thumbnail'] ) ) : ?>
+                <div class="bef-featured-event__media">
+                    <a href="<?php echo esc_url( $event['url'] ); ?>">
+                        <img class="bef-featured-event__image" src="<?php echo esc_url( $event['thumbnail'] ); ?>" alt="<?php echo esc_attr( $event['title'] ); ?>">
+                    </a>
+                </div>
+            <?php endif; ?>
+        </div>
+        <?php
         return ob_get_clean();
     }
 
@@ -3912,7 +4204,7 @@ class BEF_Calendar {
                         'ticketUrl'         => $ticket_url,
                         'ticketLabel'       => $ticket_label ? $ticket_label : __( 'Purchase Tickets', 'bef-calendar' ),
                         'excerpt'           => $excerpt,
-                        'thumbnail'         => get_the_post_thumbnail_url( $post_id, 'medium' ) ? get_the_post_thumbnail_url( $post_id, 'medium' ) : $remote_image,
+                        'thumbnail'         => $this->get_event_image_url( $post_id, 'medium' ),
                         'categories'        => wp_get_post_terms( $post_id, self::TAXONOMY, array( 'fields' => 'names' ) ),
                         'source'            => 'wordpress',
                         'sourceLabel'       => $source_label,

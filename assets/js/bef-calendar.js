@@ -117,7 +117,7 @@
     }
 
     if (hasViewLink && !duplicateLinks) {
-      const externalAttrs = event.source === 'eventbrite' ? '  rel="noopener noreferrer"' : '';
+      const externalAttrs = event.source === 'eventbrite' ? ' target="_blank" rel="noopener noreferrer"' : '';
       actions.push(`<a href="${escapeHtml(event.url)}" class="bef-event-link bef-event-link--detail"${externalAttrs}>${escapeHtml(event.linkLabel || labels.viewEvent)}</a>`);
     }
 
@@ -142,7 +142,7 @@
       const location = event.location ? `<p class="bef-event-location">${escapeHtml(event.location)}</p>` : '';
       const excerpt = event.excerpt ? `<p class="bef-event-excerpt">${escapeHtml(event.excerpt)}</p>` : '';
       const time = formatTimeRange(event) ? `<p class="bef-event-time">${escapeHtml(formatTimeRange(event))}</p>` : '';
-      const source = event.sourceLabel ? `<p class="bef-event-source">${escapeHtml(event.sourceLabel)}</p>` : '';
+      const source = '';
       const recurrence = event.recurrenceSummary ? `<p class="bef-event-recurrence">${escapeHtml(event.recurrenceSummary)}</p>` : '';
 
       return `
@@ -187,7 +187,7 @@
         const thumb = event.thumbnail ? `<div class="bef-agenda-thumb"><img src="${escapeHtml(event.thumbnail)}" alt=""></div>` : '';
         const time = formatTimeRange(event) ? `<span>${escapeHtml(formatTimeRange(event))}</span>` : '';
         const location = event.location ? `<span>${escapeHtml(event.location)}</span>` : '';
-        const source = event.sourceLabel ? `<span>${escapeHtml(event.sourceLabel)}</span>` : '';
+        const source = '';
         const excerpt = event.excerpt ? `<p class="bef-agenda-excerpt">${escapeHtml(event.excerpt)}</p>` : '';
         const recurrence = event.recurrenceSummary ? `<p class="bef-event-recurrence">${escapeHtml(event.recurrenceSummary)}</p>` : '';
 
