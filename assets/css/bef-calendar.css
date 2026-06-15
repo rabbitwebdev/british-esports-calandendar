@@ -689,17 +689,17 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 1.25rem;
+  padding: 1.25rem 0;
 }
 
 .bef-archive-card__eyebrow {
   margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: normal;
     font-size: 10px;
     font-weight: 700;
-    color: #fff;
-    background-color: #cd2f45;
+    color: #cd2f45;
+    background-color: #fff;
     padding: 9px;
     width: auto;
     height: auto;
@@ -709,7 +709,7 @@
 
 .bef-archive-card__title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 26px;
   line-height: 1.15;
 }
 
