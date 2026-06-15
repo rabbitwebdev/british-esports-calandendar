@@ -1,7 +1,7 @@
 .bef-calendar-section,
 .bef-event-single {
   --bef-bg-image: none;
-  --bef-accent: #0d47a1;
+  --bef-accent: #030a32;
   --bef-accent-dark: #092a61;
   --bef-surface: #ffffff;
   --bef-surface-alt: #f5f7fb;
@@ -913,7 +913,7 @@
 .bef-agenda-panel {
   position: relative;
   z-index: 1;
-  padding: 0 2rem 2rem;
+  padding: 0 0.5rem 0.5rem;
 }
 
 .bef-agenda-list {
@@ -921,7 +921,7 @@
   backdrop-filter: blur(8px);
   border: 1px solid var(--bef-border);
   border-radius: 0px; 
-  padding: 1.25rem;
+  padding: 0.5rem;
 }
 
 .bef-agenda-empty {
@@ -932,23 +932,39 @@
 .bef-agenda-group+.bef-agenda-group {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid var(--bef-border);
+  border-top: 1px solid #cd2f45;
+  background-color: #030a32;
+    color: #fff;
+    padding-bottom: 0.5rem;
 }
 
 .bef-agenda-date {
   margin: 0 0 0.85rem;
   font-size: 1.1rem;
   font-weight: 800;
+  padding-left: 1rem;
+}
+
+section.bef-agenda-group {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #cd2f45;
+  background-color: #030a32;
+  color: #fff;
+  padding-bottom: 0.5rem;
 }
 
 .bef-agenda-card {
   display: grid;
-  grid-template-columns: minmax(0, 180px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 250px) minmax(0, 1fr);
   gap: 1rem;
-  border: 1px solid var(--bef-border);
+  border: 1px solid #cd2f45;
   border-radius: 0px; 
   padding: 1rem;
-  background: #fff;
+  background: #eee;
+    color: #000;
+    width: 98%;
+    margin: auto;
 }
 
 .bef-agenda-card+.bef-agenda-card {
@@ -958,14 +974,16 @@
 .bef-agenda-thumb {
   overflow: hidden;
   border-radius: 0px; 
-  min-height: 150px;
+  min-height: auto;
+    height: auto;
   background: var(--bef-surface-alt);
 }
 
 .bef-agenda-thumb img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
 }
 
 .bef-agenda-content h4 {
@@ -986,7 +1004,8 @@
 
 .bef-agenda-excerpt {
   margin: 0 0 0.9rem;
-  color: var(--bef-muted);
+  font-size: 14px;
+  color: #030a32;
 }
 
 @media (max-width: 768px) {
