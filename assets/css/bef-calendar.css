@@ -1005,6 +1005,15 @@ section.bef-agenda-group {
   line-height: 1.2;
 }
 
+.bef-agenda-content .bef-event-actions .bef-event-link--detail {
+  background: #030a32;
+  color: #fff;
+}
+
+.bef-agenda-content .bef-event-recurrence {
+  display: none;
+}
+
 .bef-agenda-meta {
   display: flex;
   flex-wrap: wrap;
@@ -1579,7 +1588,7 @@ aside.bef-calendar-sidebar {
 
 .bef-event-link {
   text-transform: uppercase;
-  padding: 8px 5px;
+  padding: 8px 20px;
 }
 
 .bef-calendar-grid-panel {
