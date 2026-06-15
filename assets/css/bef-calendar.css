@@ -661,6 +661,7 @@
   border-radius: 0px; 
   overflow: hidden;
   box-shadow: 0 20px 45px rgba(10, 20, 40, 0.07);
+  padding: 0.75rem;
 }
 
 .bef-archive-card__overlay {
@@ -692,12 +693,18 @@
 }
 
 .bef-archive-card__eyebrow {
-  margin: 0 0 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  font-size: 0.76rem;
-  font-weight: 800;
-  color: var(--bef-accent);
+  margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    background-color: #cd2f45;
+    padding: 9px;
+    width: auto;
+    height: auto;
+    line-height: 1;
+    border: 1px solid #cd2f45;
 }
 
 .bef-archive-card__title {
@@ -766,8 +773,8 @@
 }
 
 .bef-event-archive__pagination .page-numbers .current {
-  background: var(--bef-accent);
-  border-color: var(--bef-accent);
+  background: #030a32;
+  border-color: #030a32;
   color: #fff;
 }
 
@@ -828,30 +835,32 @@
 }
 
 .bef-archive-card__terms {
-  position: absolute;
+  position: relative;
     z-index: 3;
-    top: -50px;
-    margin-bottom: 0.85rem;
+    top: auto;
+    margin: 5px 0;
     left: 0;
-    background-color: #cd2f45;
-    font-size: 12px;
-    color: #fff;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    display: flex;
 }
 
 .bef-archive-chip {
   display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 34px;
     padding: 9px;
     border-radius: 0px;
-    background: rgba(13, 71, 161, 0.08);
-    border: 1px solid rgba(13, 71, 161, 0.12);
-    color: var(--bef-accent-dark);
-    font-size: 12px;
+    background: #fff;
+    border: 1px solid #cd2f45;
+    color: #cd2f45;
+    font-size: 10px;
     font-weight: 700;
     line-height: 1;
     text-decoration: none;
+    text-transform: uppercase;
 }
 
 .bef-event-archive__filter-stack {
