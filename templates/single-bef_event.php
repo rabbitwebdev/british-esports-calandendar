@@ -195,12 +195,7 @@ while ( have_posts() ) :
                 </header>
 
                 <div class="bef-event-single__content">
-                    <?php if ( 'eventbrite' === $source_meta && $eventbrite_summary ) : ?>
-                        <div class="bef-event-single__eventbrite-summary">
-                            <h2><?php esc_html_e( 'About this Eventbrite event', 'bef-calendar' ); ?></h2>
-                            <?php echo wp_kses_post( wpautop( $eventbrite_summary ) ); ?>
-                        </div>
-                    <?php endif; ?>
+                  
 
                     <?php the_content(); ?>
                 </div>
