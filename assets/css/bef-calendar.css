@@ -111,7 +111,8 @@
    background: var(--bef-accent);
   color: #fff;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .bef-calendar-button:hover,
@@ -119,6 +120,8 @@
 .bef-nav-button:hover,
 .bef-today-button:hover {
   transform: translateY(-1px);
+  background-color: #dc3445;
+    color: #fff;
 }
 
 .bef-calendar-header {
@@ -414,7 +417,7 @@
 }
 
 .bef-event-single__article {
-  max-width: 1180px;
+  max-width: 1780px;
   margin: 0 auto;
 }
 
@@ -430,7 +433,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.95fr);
   gap: 2rem;
-  padding: 2rem;
+  padding: 1rem;
   align-items: start;
 }
 
@@ -514,6 +517,7 @@
 .bef-event-single__content {
   padding: 0 2rem 2rem;
   max-width: 76ch;
+  color: #000;
 }
 
 .bef-event-single__content>*:first-child {

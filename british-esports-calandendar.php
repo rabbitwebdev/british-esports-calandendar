@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       British Esports Calandendar
  * Description:       Front end calendar for British Esports events, with backend event management, shortcode support, an ACF block, Eventbrite integration, British Arena sync, and single/archive templates, ticket/register buttons, event category archive filters, month/agenda view toggle, recurring events, and Google Sheets intake sync, and CSV/XLSX upload imports from Google Sheets exports.
- * Version:           1.18.4
+ * Version:           1.20.0
  * Author:            PYork
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'BEF_CALENDAR_VERSION' ) ) {
-    define( 'BEF_CALENDAR_VERSION', '1.18.4' );
+    define( 'BEF_CALENDAR_VERSION', '1.20.0' );
 }
 
 if ( ! defined( 'BEF_CALENDAR_FILE' ) ) {

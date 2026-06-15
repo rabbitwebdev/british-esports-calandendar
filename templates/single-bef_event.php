@@ -158,7 +158,7 @@ while ( have_posts() ) :
                             <?php endif; ?>
 
                             <?php if ( $external_url ) : ?>
-                                <a class="bef-calendar-button bef-calendar-button--ghost" href="<?php echo esc_url( $external_url ); ?>" target="_blank" rel="noopener noreferrer">
+                                <a class="bef-calendar-button btn btn--solid btn--primary  bef-calendar-button--ghost" href="<?php echo esc_url( $external_url ); ?>" target="_blank" rel="noopener noreferrer">
                                     <?php esc_html_e( 'Visit Event Website', 'bef-calendar' ); ?>
                                 </a>
                             <?php endif; ?>
