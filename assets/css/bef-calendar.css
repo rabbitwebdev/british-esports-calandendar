@@ -1201,11 +1201,11 @@ section.bef-agenda-group {
 .bef-staff-form select,
 .bef-staff-form textarea {
   width: 100%;
-  border: 1px solid var(--bef-border);
+  border: 1px solid #000;
   border-radius: 0px;
   padding: 0.85rem 0.95rem;
   background: #fff;
-  color: var(--bef-text);
+  color: #000;
   box-sizing: border-box;
 }
 
