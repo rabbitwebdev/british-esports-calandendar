@@ -3510,8 +3510,19 @@ class BEF_Calendar {
                         'name'          => 'show_featured_event',
                         'type'          => 'true_false',
                         'ui'            => 1,
-                        'message'       => 'Display the next featured event above the calendar',
+                        'message'       => 'Display featured events above the calendar',
                         'default_value' => 1,
+                    ),
+                    array(
+                        'key'           => 'field_bef_featured_event_count',
+                        'label'         => 'Featured Events Count',
+                        'name'          => 'featured_event_count',
+                        'type'          => 'number',
+                        'min'           => 1,
+                        'max'           => 12,
+                        'step'          => 1,
+                        'default_value' => 3,
+                        'instructions'  => 'How many featured events to show above the calendar.',
                     ),
                     array(
                         'key'           => 'field_bef_show_view_toggle',
@@ -3647,6 +3658,7 @@ class BEF_Calendar {
                 'show_wordpress'       => 'yes',
                 'show_eventbrite'      => ! empty( $settings['default_show_external'] ) ? 'yes' : 'no',
                 'show_featured'        => 'yes',
+                'featured_count'       => 3,
                 'show_view_toggle'     => 'yes',
                 'class'                => '',
                 'id'                   => '',
@@ -3671,6 +3683,7 @@ class BEF_Calendar {
                 'show_wordpress'       => 'yes' === strtolower( (string) $atts['show_wordpress'] ),
                 'show_eventbrite'      => 'yes' === strtolower( (string) $atts['show_eventbrite'] ),
                 'show_featured_event'  => 'yes' === strtolower( (string) $atts['show_featured'] ),
+                'featured_count'       => max( 1, absint( $atts['featured_count'] ) ),
                 'show_view_toggle'     => 'yes' === strtolower( (string) $atts['show_view_toggle'] ),
                 'classes'              => $atts['class'],
                 'section_id'           => $atts['id'],
@@ -3717,6 +3730,7 @@ class BEF_Calendar {
                 'background_image'     => is_array( $background ) && ! empty( $background['url'] ) ? $background['url'] : '',
                 'show_sidebar'         => function_exists( 'get_field' ) ? (bool) get_field( 'show_sidebar' ) : true,
                 'show_featured_event'  => function_exists( 'get_field' ) ? (bool) get_field( 'show_featured_event' ) : true,
+                'featured_count'       => function_exists( 'get_field' ) ? max( 1, absint( get_field( 'featured_event_count' ) ) ) : 3,
                 'show_view_toggle'     => function_exists( 'get_field' ) ? (bool) get_field( 'show_view_toggle' ) : true,
                 'include_past_events'  => function_exists( 'get_field' ) ? (bool) get_field( 'include_past_events' ) : true,
                 'show_wordpress'       => function_exists( 'get_field' ) ? (bool) get_field( 'show_wordpress_events' ) : true,
@@ -3749,6 +3763,7 @@ class BEF_Calendar {
             'background_image'     => '',
             'show_sidebar'         => true,
             'show_featured_event'  => true,
+            'featured_count'       => 3,
             'show_view_toggle'     => true,
             'include_past_events'  => true,
             'show_wordpress'       => true,
@@ -3771,11 +3786,12 @@ class BEF_Calendar {
             (bool) $args['show_eventbrite']
         );
 
-        $featured_event = ! empty( $args['show_featured_event'] )
-            ? $this->get_featured_event_for_frontend(
+        $featured_events = ! empty( $args['show_featured_event'] )
+            ? $this->get_featured_events_for_frontend(
                 (bool) $args['include_past_events'],
                 (bool) $args['show_wordpress'],
-                (bool) $args['show_eventbrite']
+                (bool) $args['show_eventbrite'],
+                max( 1, absint( $args['featured_count'] ) )
             )
             : array();
 
@@ -3844,8 +3860,8 @@ class BEF_Calendar {
                         </div>
                     <?php endif; ?>
 
-                    <?php if ( ! empty( $featured_event ) ) : ?>
-                        <?php echo $this->render_featured_event_markup( $featured_event ); ?>
+                    <?php if ( ! empty( $featured_events ) ) : ?>
+                        <?php echo $this->render_featured_events_markup( $featured_events ); ?>
                     <?php endif; ?>
 
                     <div class="bef-calendar-header">
@@ -3899,14 +3915,15 @@ class BEF_Calendar {
     }
 
     /**
-     * Get the next featured event for the frontend calendar.
+     * Get featured events for the frontend calendar.
      *
      * @param bool $include_past    Whether past events may be used as a fallback.
      * @param bool $show_wordpress  Whether to include local website-style events.
      * @param bool $show_eventbrite Whether to include imported Eventbrite events.
+     * @param int  $limit           Maximum number of featured events to return.
      * @return array
      */
-    private function get_featured_event_for_frontend( $include_past = true, $show_wordpress = true, $show_eventbrite = false ) {
+    private function get_featured_events_for_frontend( $include_past = true, $show_wordpress = true, $show_eventbrite = false, $limit = 3 ) {
         $query = new WP_Query(
             array(
                 'post_type'      => self::POST_TYPE,
@@ -3964,7 +3981,7 @@ class BEF_Calendar {
             }
         );
 
-        return $candidates[0];
+        return array_slice( $candidates, 0, max( 1, absint( $limit ) ) );
     }
 
     /**
@@ -4029,6 +4046,31 @@ class BEF_Calendar {
             'sourceLabel'       => $source_label,
             'recurrenceSummary' => $recurrence_summary,
         );
+    }
+
+
+    /**
+     * Render the featured events area displayed above the calendar.
+     *
+     * @param array $events Featured event data rows.
+     * @return string
+     */
+    private function render_featured_events_markup( $events ) {
+        if ( empty( $events ) ) {
+            return '';
+        }
+
+        $count = count( $events );
+
+        ob_start();
+        ?>
+        <div class="bef-featured-events bef-featured-events--count-<?php echo esc_attr( $count ); ?>">
+            <?php foreach ( $events as $event ) : ?>
+                <?php echo $this->render_featured_event_markup( $event ); ?>
+            <?php endforeach; ?>
+        </div>
+        <?php
+        return ob_get_clean();
     }
 
     /**

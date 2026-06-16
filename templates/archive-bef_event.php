@@ -187,16 +187,24 @@ $view_labels = array(
                         <?php endif; ?>
 
                         <div class="bef-archive-card__body">
+                        <div class="bef-archive-card__terms">
+                            <?php if ( ! empty( $item['terms'] ) && ! is_wp_error( $item['terms'] ) ) : ?>
+                              
+                                    <?php foreach ( $item['terms'] as $term ) : ?>
+                                        <a class="bef-archive-chip" href="<?php echo esc_url( $build_archive_url( $view, $term->slug ) ); ?>"><?php echo esc_html( $term->name ); ?></a>
+                                    <?php endforeach; ?>
+                             
+                            <?php endif; ?>
 
-                        <h3 class="bef-archive-card__title"><?php echo esc_html( $item['title'] ); ?></h3>
-
-                          
-
+                            <?php if ( $date_display ) : ?>
+                                <p class="bef-archive-card__eyebrow"><?php echo esc_html( $date_display ); ?></p>
+                            <?php endif; ?>
+                            </div>
                             <?php if ( ! empty( $item['source_label'] ) ) : ?>
                                 <p class="bef-event-source"><?php echo esc_html( $item['source_label'] ); ?></p>
                             <?php endif; ?>
 
-                          
+                            <h3 class="bef-archive-card__title"><?php echo esc_html( $item['title'] ); ?></h3>
 
                             <div class="bef-archive-card__meta">
                                 <?php if ( $time_display ) : ?>
@@ -226,19 +234,6 @@ $view_labels = array(
                                         <?php echo esc_html( $item['ticket_label'] ); ?>
                                     </a>
                                 <?php endif; ?>
-                            </div>
-                            <div class="bef-archive-card__terms">
-                            <?php if ( ! empty( $item['terms'] ) && ! is_wp_error( $item['terms'] ) ) : ?>
-                              
-                                    <?php foreach ( $item['terms'] as $term ) : ?>
-                                        <a class="bef-archive-chip" href="<?php echo esc_url( $build_archive_url( $view, $term->slug ) ); ?>"><?php echo esc_html( $term->name ); ?></a>
-                                    <?php endforeach; ?>
-                               
-                            <?php endif; ?>
-
-                            <?php if ( $date_display ) : ?>
-                                <p class="bef-archive-card__eyebrow"><?php echo esc_html( $date_display ); ?></p>
-                            <?php endif; ?>
                             </div>
                         </div>
                     </article>

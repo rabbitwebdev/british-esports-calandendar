@@ -99,14 +99,14 @@ while ( have_posts() ) :
                             <?php endif; ?>
 
                             <?php if ( $location ) : ?>
-                                <div class="bef-event-single__meta-item bef-event-single__meta-item--wide">
+                                <div class="bef-event-single__meta-item">
                                     <span class="bef-event-single__meta-label"><?php esc_html_e( 'Location', 'bef-calendar' ); ?></span>
                                     <strong><?php echo esc_html( $location ); ?></strong>
                                 </div>
                             <?php endif; ?>
 
                             <?php if ( 'eventbrite' === $source_meta && $eventbrite_organizer ) : ?>
-                                <div class="bef-event-single__meta-item bef-event-single__meta-item--wide">
+                                <div class="bef-event-single__meta-item">
                                     <span class="bef-event-single__meta-label"><?php esc_html_e( 'Organiser', 'bef-calendar' ); ?></span>
                                     <strong><?php echo esc_html( $eventbrite_organizer ); ?></strong>
                                 </div>
@@ -158,7 +158,7 @@ while ( have_posts() ) :
                             <?php endif; ?>
 
                             <?php if ( $external_url ) : ?>
-                                <a class="bef-calendar-button btn btn--solid btn--primary  bef-calendar-button--ghost" href="<?php echo esc_url( $external_url ); ?>" target="_blank" rel="noopener noreferrer">
+                                <a class="bef-calendar-button bef-calendar-button--ghost btn btn--solid btn--primary" href="<?php echo esc_url( $external_url ); ?>" target="_blank" rel="noopener noreferrer">
                                     <?php esc_html_e( 'Visit Event Website', 'bef-calendar' ); ?>
                                 </a>
                             <?php endif; ?>
